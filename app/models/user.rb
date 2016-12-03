@@ -6,6 +6,14 @@ class User < ApplicationRecord
 
   has_many :games
   has_many :nights, through: :games
+  has_many :players, through: :games
+
+
+
+
+
+
+
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
