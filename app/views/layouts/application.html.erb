@@ -6,11 +6,22 @@
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <!-- google font link -->
-    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,700" rel="stylesheet">
     <%= javascript_include_tag 'application' %>
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <%= render 'layouts/nav' %>
+    </header>
+    <div id="mainwrap">
+      <div class="container">
+        <div class="logo">
+          <a href="/"><img src="../assets/logo.svg"></a>
+        </div>
+        <br>
+        <%= yield %>
+      </div><!-- /container -->
+    </div><!-- /mainwrap -->
   </body>
 </html>

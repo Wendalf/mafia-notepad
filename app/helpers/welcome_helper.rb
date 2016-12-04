@@ -1,11 +1,11 @@
 module WelcomeHelper
   def greetings
     if current_user && !current_user.name.nil? 
-      "Hello #{current_user.name}!"
+      "HELLO #{current_user.name}"
     elsif current_user
-      "Hello #{current_user.email}!"
+      "HELLO #{current_user.email}"
     else
-      "Welcome to Mafia Notepad"
+      "MAFIA NOTEPAD"
     end
   end
 end

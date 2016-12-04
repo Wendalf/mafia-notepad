@@ -14,6 +14,7 @@
 
 @import "bootstrap";
 @import "welcome";
+@import "font-awesome";
 
 html {
 	background: url("mountain.jpg") no-repeat center center fixed;
@@ -22,4 +23,43 @@ html {
 	   -moz-background-size: cover;
 	     -o-background-size: cover;
 	        background-size: cover;
+}
+
+body {
+  background-color : transparent;
+}
+
+.btn-outline-primary {
+  color: #f85c37;
+  background-image: none;
+  background-color: transparent;
+  border-color: #f85c37;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #f85c37;
+  border-color: #f85c37;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+  color: #fff;
+  background-color: #f85c37;
+  border-color: #f85c37;
+}
+
+.btn-outline-primary:active, .btn-outline-primary.active,
+.open > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #f85c37;
+  border-color: #f85c37;
+}
+
+.btn-outline-primary:active:hover, .btn-outline-primary:active:focus, .btn-outline-primary:active.focus, .btn-outline-primary.active:hover, .btn-outline-primary.active:focus, .btn-outline-primary.active.focus,
+.open > .btn-outline-primary.dropdown-toggle:hover,
+.open > .btn-outline-primary.dropdown-toggle:focus,
+.open > .btn-outline-primary.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #F86A49;
+  border-color: #F9795B;
 }
