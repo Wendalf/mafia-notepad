@@ -2,7 +2,11 @@ class GamesController < ApplicationController
   before_action :authenticate_user! 
 
   def index
-
+    @games = current_user.games
+    respond_to do |format|
+      format.html {render :index}
+      format.json {render json: @games}
+    end
   end
 
   def new

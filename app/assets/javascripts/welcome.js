@@ -20,4 +20,26 @@ $(function(){
     e.preventDefault();
   });
 
+  $("a#all_games").click(function(e) {
+    e.preventDefault();
+
+    var $games = $("div#hiddengames");
+    var html = "<h3>Your Games</h3>";
+
+    $.ajax({
+      method: "GET",
+      url: "/games",
+      dataType: "json"
+    })
+      .done(function(data) {
+        data.forEach(function(game, index, data) {
+          html += `<p>Game ${index+1}: ${game.capacity} players | ${game.game_status}</p>`;
+        });
+        $games.html(html);
+        $("div.buttons").fadeOut("slow", function() {
+          $("div#hiddengames").fadeIn("slow");
+        });
+      });
+  });
+
 });

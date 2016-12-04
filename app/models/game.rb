@@ -4,6 +4,6 @@ class Game < ApplicationRecord
   has_many :players
   has_many :characters, through: :players
 
-  enum game_result: [:stillplaying, :mafia, :good_people]
+  enum game_status: [:stillplaying, :mafia, :good_people]
 
 end

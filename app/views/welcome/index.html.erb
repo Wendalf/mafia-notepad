@@ -5,7 +5,7 @@
     <% if user_signed_in? %>
       <%= link_to "NEW GAME", new_game_path, id: "new_game", class: "btn btn-outline-primary" %>
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <%= link_to "PAST GAMES", games_path, id: "all_games", class: "btn btn-outline-primary" %>
+      <%= link_to "YOUR GAMES", games_path, id: "all_games", class: "btn btn-outline-primary" %>
     <% else %>
       <%= link_to "SIGN IN", new_user_session_path, class: "btn btn-outline-primary" %>
       &nbsp;&nbsp;&nbsp;&nbsp;
@@ -23,4 +23,9 @@
       <%= submit_tag("Create Game", :class => "btn btn-outline-primary") %>
     <% end %>
   </div>
+
+  <div id="hiddengames">
+
+  </div>
+  
 </div>
