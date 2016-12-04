@@ -1,20 +1,26 @@
 <div class="row">
   <h1><%= greetings %></h1>
   <br>
-  <% if user_signed_in? %>
-    <%= link_to "NEW GAME", new_game_path, id: "new_game", class: "btn btn-outline-primary" %>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <%= link_to "PAST GAMES", games_path, id: "all_games", class: "btn btn-outline-primary" %>
-  <% else %>
-    <%= link_to "SIGN IN", new_user_session_path, class: "btn btn-outline-primary" %>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <%= link_to "SIGN UP", new_user_registration_path, class: "btn btn-outline-primary" %>
-    <br />
-    <br />
-    <%= link_to "Sign in with Github", user_github_omniauth_authorize_path, class: "btn btn-outline-primary" %>
-  <% end %>
-  <br>
-  <br>
-  <div class="col-lg-6 col-lg-offset-3">
+  <div class="buttons">
+    <% if user_signed_in? %>
+      <%= link_to "NEW GAME", new_game_path, id: "new_game", class: "btn btn-outline-primary" %>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <%= link_to "PAST GAMES", games_path, id: "all_games", class: "btn btn-outline-primary" %>
+    <% else %>
+      <%= link_to "SIGN IN", new_user_session_path, class: "btn btn-outline-primary" %>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <%= link_to "SIGN UP", new_user_registration_path, class: "btn btn-outline-primary" %>
+      <br />
+      <br />
+      <%= link_to "Sign in with Github", user_github_omniauth_authorize_path, class: "btn btn-outline-primary" %>
+    <% end %>
+  </div>
+  <div class="hiddenform">
+    <%= form_tag({controller: "games", action: "create"}, method: "post") do %>
+      <%= label_tag(:capacity, "How many people are playing this game?") %>
+      <%= number_field_tag(:capacity) %>
+      <%= hidden_field_tag(:user_id, "#{current_user.id}") %>
+      <%= submit_tag("Create Game", :class => "btn btn-outline-primary") %>
+    <% end %>
   </div>
 </div>

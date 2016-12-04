@@ -6,11 +6,12 @@ class GamesController < ApplicationController
   end
 
   def new
-
+    @game = Game.new
   end
 
   def create
-
+    @game = Game.create(game_params)
+    redirect_to @game 
   end
 
   def show
@@ -29,4 +30,9 @@ class GamesController < ApplicationController
 
   end
 
+  
+private
+  def game_params
+    params.permit(:user_id, :capacity)
+  end
 end
