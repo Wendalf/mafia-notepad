@@ -20,6 +20,7 @@ $(function(){
     e.preventDefault();
   });
 
+  // ajax call for all current user's games and show result
   $("a#all_games").click(function(e) {
     e.preventDefault();
 
