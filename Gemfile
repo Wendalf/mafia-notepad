@@ -39,12 +39,16 @@ gem 'figaro'
 
 # Use bootstrap 4.0
 gem 'bootstrap', '~> 4.0.0.alpha5'
+# source 'https://rails-assets.org' do
+#   gem 'rails-assets-tether', '>= 1.1.0'
+# end
 # Use ActiveModel Serializer
 gem 'active_model_serializers'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
+  # gem 'byebug', platform: :mri
+  gem 'pry'
 end
 
 group :development do

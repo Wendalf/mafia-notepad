@@ -1,0 +1,32 @@
+<style>
+html {
+	background: no-repeat center center fixed url(<%= asset_path 'night.jpg' %>);
+	min-height: 100%;
+	-webkit-background-size: cover;
+	   -moz-background-size: cover;
+	     -o-background-size: cover;
+	        background-size: cover;
+}
+</style>
+
+<div class="row">
+<h3>Game Playing</h3>
+</div>
+<div class="row">
+<br />
+</div>
+<div class="row">
+  <div class="col-sm-2" id="playersInfo">
+    <h4>Character Distribution</h4>
+      <% @game.players.each do |player| %>
+        <%= player.name %>: <%= player.character.name %>
+        <br />
+      <% end %>
+  </div>
+  <div class="col-sm-8" id="night">
+    <h4>New Night Form</h4>
+  </div>
+  <div class="col-sm-2" id="nightLog">
+    <h4>Night Logs</h4>
+  </div>
+</div>

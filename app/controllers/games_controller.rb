@@ -14,29 +14,36 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = Game.create(game_params)
-    redirect_to @game 
+    @game = Game.create(strong_params)
+    redirect_to edit_game_path(@game)
   end
 
   def show
     @game = Game.find(params[:id])
-    respond_to do |format|
-      format.html { render :show }
-      format.json { render json: @game}
-    end
   end
 
   def edit
-
+    @game = Game.find(params[:id])
+    @game.capacity.times do
+      @game.players.build
+    end 
   end
 
   def update
-
+    @game = Game.find(params[:id])
+    @game.update(game_params)
+    redirect_to game_path(@game)
   end
 
   
-private
-  def game_params
+  private
+
+  def strong_params
     params.permit(:user_id, :capacity)
   end
+
+  def game_params
+    params.require(:game).permit(players_attributes: [:name, :character_id])
+  end
+
 end

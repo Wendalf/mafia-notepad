@@ -1,0 +1,18 @@
+<div class="row">
+  <h3>Enter player's name and assign everyone a role</h3>
+  <br />
+  <div class="assignPlayers">
+    <%= form_for(@game) do |f| %>
+      <%= f.fields_for :players do |player| %>
+        <%= player.label :name, "Player Name: " %>
+        <%= player.text_field :name %>
+        &nbsp;
+        <%= player.label :character_id, "Character: " %>
+        <%= player.collection_select(:character_id, Character.all, :id, :name) %>
+        <br />
+      <% end %>
+      <br />
+    <%= f.submit "Night is coming...", :class => "btn btn-outline-primary" %>
+    <% end %>
+  </div>
+</div>
