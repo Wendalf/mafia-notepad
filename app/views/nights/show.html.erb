@@ -1,0 +1,21 @@
+<div class="row">
+  <h2>THE NIGHT IS OVER</h2>
+  <h3>Players please open your eyes</h3>
+</div>
+<hr />
+<div class="row">
+  <h3>What happened last night:</h3>
+  <div class="col-sm-6 logs">
+    <h4>NIGHT LOGS</h4>
+    <% logs_array(@night).each do |log| %>
+      <%= log %>
+      <br>
+    <% end %>
+  </div>
+  <div class="col-sm-6 notes">
+  <h4>NIGHT NOTES</h4>
+    <% notes_array(@night).each do |note| %>
+      <%= note %><br>
+    <% end %>
+  </div>
+</div>
