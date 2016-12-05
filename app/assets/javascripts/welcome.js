@@ -44,7 +44,8 @@ $(function(){
         });
       });
   });
-
+  
+  //going back from games field to toggled away buttons
   $("div#hiddengames").on("click", "button", function() {
     $("div#hiddengames").fadeOut("slow", function() {
       $("div.buttons").fadeIn("slow");

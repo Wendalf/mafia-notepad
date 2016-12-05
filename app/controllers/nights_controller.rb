@@ -11,7 +11,11 @@ class NightsController < ApplicationController
     DetermineDeath.death_and_notes(got_killed, @night)
 
     @night.save
-    redirect_to game_night_path(@game, @night)
+
+    respond_to do |format|
+      format.html {redirect_to game_night_path(@game, @night)}
+      format.json {render json: @night}
+    end
   end
 
   def update
@@ -19,7 +23,10 @@ class NightsController < ApplicationController
   end 
 
   def show
-
+    respond_to do |format|
+      format.html {render :show}
+      format.json {render json: @night}
+    end
   end
 
   private

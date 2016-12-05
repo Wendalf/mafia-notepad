@@ -10,7 +10,7 @@ html {
 </style>
 
 <div class="row">
-<h3>Game Playing</h3>
+<h2>GAME PLAYING</h2>
 </div>
 <div class="row">
   <h3 class="result"></h3>
@@ -33,22 +33,24 @@ html {
   </div>
 
   <div class="col-sm-8" id="night">
-    <h4>A New Night has yet come</h4>
-    <p>All players close your eyes</p>
-    <hr />
-      <%= form_for([@game, @night]) do |f| %>
-        <% @game.characters.uniq.each do |character| %>
-          <% if character.ability != nil && Player.alive_this_game_character(@game, character) %>
-            <fieldset>
-              <%= label_tag("night_events[#{character.name}]", "Who did #{character.name} #{character.ability}?") %>
-              <%= select_tag("night_events[#{character.name}]", options_from_collection_for_select(@game.alive_players, :id, :name), prompt: "Please Select") %>
-            </fieldset>
+    <div id="newnight_field">
+      <h3>A New Night has yet come</h3>
+      <p>All players close your eyes</p>
+      <hr />
+        <%= form_for([@game, @night]) do |f| %>
+          <% @game.characters.uniq.each do |character| %>
+            <% if character.ability != nil && Player.alive_this_game_character(@game, character) %>
+              <fieldset>
+                <%= label_tag("night_events[#{character.name}]", "Who did #{character.name} #{character.ability}?") %>
+                <%= select_tag("night_events[#{character.name}]", options_from_collection_for_select(@game.alive_players, :id, :name), prompt: "Please Select") %>
+              </fieldset>
+            <% end %>
           <% end %>
+          <br />
+          <br />
+          <%= f.submit "Night is over", :class => "btn btn-outline-primary" %>
         <% end %>
-        <br />
-        <br />
-        <%= f.submit "Night is over", :class => "btn btn-outline-primary" %>
-      <% end %>
+    </div>
   </div>
 
   <div class="col-sm-2" id="nightLog">
