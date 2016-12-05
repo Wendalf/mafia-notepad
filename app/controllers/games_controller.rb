@@ -20,6 +20,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+    @night = Night.new
   end
 
   def edit
