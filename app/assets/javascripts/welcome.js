@@ -65,20 +65,16 @@ $(function(){
     this.notes = night.notes;
   }
 
-  Game.prototype.buildNights = function() {
+  Game.prototype.lastNight = function() {
     var nights = this.nights;
-    var nightsObjects = [];
-    nights.forEach(function(night) {
-      nightsObjects.push(new Night(night));
-    });
-    return nightsObjects;
+    var lastNight = new Night(nights[nights.length - 1]);
+    return lastNight;
   }
 
-  Game.prototype.buildEditNightForm = function(nights) {
+  Game.prototype.buildEditNightForm = function() {
     var players = this.players;
-    var lastNight = nights[nights.length - 1];
     var gameId = this.id;
-    var nightId = lastNight.id;
+    var nightId = this.lastNight().id;
     var formHtml = "<form class='edit_night' id='edit_night_" + nightId + "' action='/games/" + gameId + "/nights/" + nightId  + "/edit' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'><input type='hidden' name='_method' value='patch'><label for='day_event_executed'>Did anyone get executed by voting to death?</label>&nbsp;<select name='day_event[executed]' id='day_event_executed'><option value=''>No one got executed</option>";
 
     players.forEach(function(player) {
@@ -119,8 +115,7 @@ $(function(){
     })
       .done(function(data) {
         var game = new Game(data);
-        var nights = game.buildNights();
-        var editFormHtml = game.buildEditNightForm(nights);
+        var editFormHtml = game.buildEditNightForm();
         $("div#edit_night_form").html(editFormHtml);
       });
   });
