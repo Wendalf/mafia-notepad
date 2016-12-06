@@ -24,6 +24,7 @@ html {
 	   -moz-background-size: cover;
 	     -o-background-size: cover;
 	        background-size: cover;
+  transition: background-image 1s linear;
 }
 
 body {

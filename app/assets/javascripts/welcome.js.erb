@@ -91,16 +91,20 @@ $(function(){
   $( "form#new_night" ).on( "submit", function(e) {
     e.preventDefault();
 
-    $("div#newnight_field").fadeOut("slow", function() {
-      $("div#editnight_field").fadeIn("slow");
-    });
-
-    var src = "https://blackrockdigital.github.io/startbootstrap-grayscale/img/intro-bg.jpg"
+    // preload image to prevent browser flicker and change background image
+    var src = "<%= asset_path('sea.jpg') %>"
     var $img = $( '<img src="' + src + '">' );
     $img.bind( 'load', function(){
       $("html").css({"background-image": "url(" + src + ")"});
     } );
     if( $img[0].width ){ $img.trigger( 'load' ); }
+    
+    // fade out the new night form, and fade in the edit night form
+    $("div#newnight_field").fadeOut(1000, function() {
+      $("div#editnight_field").fadeIn(1000);
+    });
+
+    // reset the html of the edit night form before ajax call
     $("div#edit_night_form").html("");
 
     var $form = $(this);
@@ -116,6 +120,7 @@ $(function(){
       .done(function(data) {
         var game = new Game(data);
         var editFormHtml = game.buildEditNightForm();
+        var lastNight = game.lastNight();
         $("div#edit_night_form").html(editFormHtml);
       });
   });
