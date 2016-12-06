@@ -40,7 +40,6 @@ $(function(){
         $games.html(html);
         $("div.buttons").fadeOut("slow", function() {
           $("div#hiddengames").fadeIn("slow");
-
         });
       });
   });
@@ -91,14 +90,26 @@ $(function(){
     formHtml += "</select><br/><br/><button type='button' class='btn btn-outline-primary'>Night is coming...</button></form>";
     return formHtml;
   }
+  
 
   $( "form#new_night" ).on( "submit", function(e) {
     e.preventDefault();
 
+    $("div#newnight_field").fadeOut("slow", function() {
+      $("div#editnight_field").fadeIn("slow");
+    });
+
+    var src = "https://blackrockdigital.github.io/startbootstrap-grayscale/img/intro-bg.jpg"
+    var $img = $( '<img src="' + src + '">' );
+    $img.bind( 'load', function(){
+      $("html").css({"background-image": "url(" + src + ")"});
+    } );
+    if( $img[0].width ){ $img.trigger( 'load' ); }
+    $("div#edit_night_form").html("");
+
     var $form = $(this);
     var action = $form.attr("action");
     var params = $form.serialize();
-    $("div#edit_night_form").html("");
 
     $.ajax({
       url: action,
