@@ -13,19 +13,34 @@ class NightsController < ApplicationController
     @night.save
 
     respond_to do |format|
-      format.html {redirect_to game_night_path(@game, @night)}
-      format.json {render json: @night}
+      format.html {redirect_to game_path(@game)}
+      format.json {render json: @game}
     end
   end
 
   def update
+    player_id = params[:day_event][:executed]
 
+    if player_id == ""
+      @night.notes << "No body got executed by votes.<br>"
+    else
+      player = Player.find(player_id)
+      player.update(alive: false)
+      @night.notes << "#{player.name} has been executed by votes.<br>"
+    end
+    
+    @night.save
+
+    respond_to do |format|
+      format.html {redirect_to game_path(@game)}
+      format.json {render json: @game}
+    end
   end 
 
   def show
     respond_to do |format|
       format.html {render :show}
-      format.json {render json: @night}
+      format.json {render json: @game}
     end
   end
 
