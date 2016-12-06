@@ -51,7 +51,7 @@ $(function(){
     });
   });
 
-  //Javascript Model Objects and its prototype
+  //Javascript Model Objects and prototype for Game
   function Game(data) {
     this.id = data.id;
     this.status = data.game_status;
@@ -59,15 +59,10 @@ $(function(){
     this.nights = data.nights;
   }
   
-  function Night(night) {
-    this.id = night.id;
-    this.logs = night.logs;
-    this.notes = night.notes;
-  }
-
   Game.prototype.lastNight = function() {
     var nights = this.nights;
-    var lastNight = new Night(nights[nights.length - 1]);
+    var gameId = this.id;
+    var lastNight = new Night(nights[nights.length - 1], gameId);
     return lastNight;
   }
 
@@ -87,7 +82,20 @@ $(function(){
     return formHtml;
   }
   
+  //Javascript Model Objects and prototype for Night
+  function Night(night, gameId) {
+    this.id = night.id;
+    this.logs = night.logs;
+    this.notes = night.notes;
+    this.gameId = gameId;
+  }
 
+  Night.prototype.renderLastNight = function() {
+    var aboutLastNight = this.notes + "<br/><div id='logs'><a class='btn btn-outline-primary' href='/games/" + this.gameId + "/nights/" + this.id + "' role='button'>What Happened</a></div>";
+    return aboutLastNight;
+  }
+
+  // submit the new night form with ajax post request
   $( "form#new_night" ).on( "submit", function(e) {
     e.preventDefault();
 
@@ -104,9 +112,11 @@ $(function(){
       $("div#editnight_field").fadeIn(1000);
     });
 
-    // reset the html of the edit night form before ajax call
+    // reset the html of the areas that will have info being rendered after ajax call.
     $("div#edit_night_form").html("");
+    $("div#aboutLastNight").html(""); 
 
+    //ajax call
     var $form = $(this);
     var action = $form.attr("action");
     var params = $form.serialize();
@@ -121,11 +131,27 @@ $(function(){
         var game = new Game(data);
         var editFormHtml = game.buildEditNightForm();
         var lastNight = game.lastNight();
+        var aboutLastNight = lastNight.renderLastNight();
+
         $("div#edit_night_form").html(editFormHtml);
+        $("div#aboutLastNight").html(aboutLastNight); 
       });
   });
 
-
+  // getting last night logs through ajax get request
+  $("#aboutLastNight").on("click", "a", function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: this.href,
+      method: "GET",
+      dataType: "json"
+    })
+      .done(function(data) {
+        var logs = data.logs;
+        $("#logs").html("");
+        $("#logs").hide().html(logs).fadeIn("slow");
+    });
+  });
 
 
 

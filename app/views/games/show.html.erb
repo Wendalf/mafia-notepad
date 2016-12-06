@@ -18,7 +18,7 @@ html {
   <br />
 </div>
 <div class="row">
-  <div class="col-sm-2" id="playersInfo">
+  <div class="col-sm-3" id="playersInfo">
     <h4>Character Distribution</h4>
       <% @game.characters.uniq.each do |character| %>
         <ul>
@@ -32,7 +32,7 @@ html {
       <% end %>
   </div>
 
-  <div class="col-sm-8" id="night">
+  <div class="col-sm-6" id="night">
     <div id="newnight_field">
       <h3>A New Night has yet come</h3>
       <p>All players close your eyes</p>
@@ -61,7 +61,10 @@ html {
 
   </div>
 
-  <div class="col-sm-2" id="nightLog">
+  <div class="col-sm-3" id="nightLog">
     <h4>About Last Night</h4>
+    <div id="aboutLastNight">
+     <!-- render last night info here --> 
+    </div>
   </div>
 </div>
