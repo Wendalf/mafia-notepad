@@ -20,40 +20,10 @@ $(function(){
     e.preventDefault();
   });
 
-  // ajax call for all current user's games and show result
-  $("a#all_games").click(function(e) {
-    e.preventDefault();
-
-    var $games = $("div#hiddengames");
-    var html = "<h3>Your Games</h3>";
-
-    $.ajax({
-      method: "GET",
-      url: "/games",
-      dataType: "json"
-    })
-      .done(function(data) {
-        data.forEach(function(game, index, data) {
-          html += `<p>Game ${index+1}: ${game.capacity} players | ${game.game_status}</p>`;
-        });
-        html += "<button type='button' class='btn btn-outline-primary'>Back</button>"
-        $games.html(html);
-        $("div.buttons").fadeOut("slow", function() {
-          $("div#hiddengames").fadeIn("slow");
-        });
-      });
-  });
-  
-  //going back from games field to toggled away buttons
-  $("div#hiddengames").on("click", "button", function() {
-    $("div#hiddengames").fadeOut("slow", function() {
-      $("div.buttons").fadeIn("slow");
-    });
-  });
-
   //Javascript Model Objects and prototype for Game
   function Game(data) {
     this.id = data.id;
+    this.capacity = data.capacity;
     this.status = data.game_status;
     this.players = data.players;
     this.nights = data.nights;
@@ -82,6 +52,39 @@ $(function(){
     return formHtml;
   }
   
+  // ajax call for all current user's games and show result
+  $("a#all_games").click(function(e) {
+    e.preventDefault();
+
+    var $games = $("div#hiddengames");
+    var html = "<h3>Your Games</h3>";
+
+    $.ajax({
+      method: "GET",
+      url: "/games",
+      dataType: "json"
+    })
+      .done(function(data) {
+        data.forEach(function(game, index, data) {
+          var game = new Game(game);
+          var gamenumber = index + 1;
+          html += "<p><a href='/games/" + game.id + "'>Game " + gamenumber + "</a>: " + game.capacity + " players | " + game.status + "</p>";
+        });
+        html += "<button type='button' class='btn btn-outline-primary'>Back</button><br><br>"
+        $games.html(html);
+        $("div.buttons").fadeOut("slow", function() {
+          $("div#hiddengames").fadeIn("slow");
+        });
+      });
+  });
+  
+  //going back from games field to toggled away buttons
+  $("div#hiddengames").on("click", "button", function() {
+    $("div#hiddengames").fadeOut("slow", function() {
+      $("div.buttons").fadeIn("slow");
+    });
+  });
+
   //Javascript Model Objects and prototype for Night
   function Night(night, gameId) {
     this.id = night.id;
