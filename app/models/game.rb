@@ -2,7 +2,7 @@ class Game < ApplicationRecord
   belongs_to :user
   has_many :nights
   has_many :players
-  has_many :characters, through: :players
+  has_many :characters, -> { distinct }, through: :players
 
   accepts_nested_attributes_for :players
 

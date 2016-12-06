@@ -48,7 +48,7 @@ $(function(){
       }
     });
     
-    formHtml += "</select><br/><br/><button type='button' class='btn btn-outline-primary'>Night is coming...</button></form>";
+    formHtml += "</select><br/><br/><input type='submit' name='commit' value='Night is coming...' class='btn btn-outline-primary' data-disable-with='Night is coming...'></form>";
     return formHtml;
   }
   
@@ -156,6 +156,20 @@ $(function(){
     });
   });
 
+  //submit the edit night form with ajax post request
+  $("#edit_night_form").on("submit", "form", function(e) {
+    e.preventDefault();
+
+    var $form = $(this);
+    var action = $form.attr("action");
+    var params = $form.serialize();
+    debugger;
+   // $.ajax({
+      
+   // })
+
+
+  });
 
 
 });

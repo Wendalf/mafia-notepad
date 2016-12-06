@@ -3,5 +3,6 @@ class GameSerializer < ActiveModel::Serializer
   has_one :user
   has_many :players
   has_many :nights
+  has_many :characters
 
 end
