@@ -37,6 +37,7 @@ html {
       <h3>A New Night has yet come</h3>
       <p>All players close your eyes</p>
       <hr />
+        <div id="new_night_form">
         <%= form_for([@game, @night]) do |f| %>
           <% @game.characters.uniq.each do |character| %>
             <% if character.ability != nil && Player.alive_this_game_character(@game, character) %>
@@ -49,6 +50,7 @@ html {
           <br />
           <%= f.submit "Night is over", :class => "btn btn-outline-primary" %>
         <% end %>
+        </div>
     </div>
     <div id="editnight_field">
       <h3>The Night is Over</h3>

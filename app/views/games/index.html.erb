@@ -4,7 +4,7 @@
   <ul>
     <% @games.each_with_index do |game, index| %>
       <li>
-        <b>Game <%= "#{index+1}" %></b> | <%= game.capacity %> Players | <%= game.game_status %>
+        <b><%= link_to "Game #{index+1}", game_path(game) %></b> | <%= game.capacity %> Players | <%= game.game_status %>
       </li>
     <% end %>
   </ul>
