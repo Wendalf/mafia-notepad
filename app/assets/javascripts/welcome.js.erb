@@ -56,7 +56,7 @@ $(function(){
       }
     });
     
-    formHtml += "</select><br/><br/><input type='submit' name='commit' value='Night is coming...' class='btn btn-outline-primary' data-disable-with='Night is coming...'></form>";
+    formHtml += "</select><br/><br/><input type='submit' name='commit' value='Night is coming...' class='btn btn-primary' data-disable-with='Night is coming...'></form>";
     return formHtml;
   }
 
@@ -206,7 +206,12 @@ $(function(){
         $("div#aboutLastNight").html(aboutLastNight); 
         if (game.end()){
           var result = game.status;
-          $("div#result h3").html(result); 
+          $("div#gameStatus h2").html("GAME OVER");  
+            if(result === "mafia") {
+              $("div#result h3").html("Mafia Won!");
+            } else {
+              $("div#result h3").html("Good People Won!");
+            }
           $("div#newnight_field").fadeOut("slow", function() {
             $("div#result").fadeIn("slow");
           });
@@ -263,7 +268,12 @@ $(function(){
         var game = new Game(data);
         if (game.end()){
           var result = game.status;
-          $("div#result h3").html(result); 
+          $("div#gameStatus h2").html("GMAE OVER");  
+            if(result === "mafia") {
+              $("div#result h3").html("Mafia Won!");
+            } else {
+              $("div#result h3").html("Good People Won!");
+            }
           $("div#editnight_field").fadeOut("slow", function() {
             $("div#result").fadeIn("slow");
           });

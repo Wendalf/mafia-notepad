@@ -1,0 +1,15 @@
+<h4>Character Distribution</h4>
+<% @game.characters.uniq.each do |character| %>
+  <ul>
+    <b><%= character.name.capitalize %>: </b>
+    <% @game.players.each do |player| %>
+      <% if player.character == character %>
+        <% if player.alive %>
+          <li><%= player.name %></li>
+        <% else %>
+          <li><del><%= player.name %></del></li>
+        <% end %>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>

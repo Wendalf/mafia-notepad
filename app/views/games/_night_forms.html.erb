@@ -1,0 +1,49 @@
+<div id="result" >
+  <h3></h3>
+  <br />
+</div>
+
+<div id="newnight_field">
+  <h3>The Night Has Come</h3>
+  <br />
+  <p>
+    “Your dreaming self seeks to tell you something your waking ears will not hear” 
+    <br />― Jacqueline Carey, <em>Kushiel's Chosen</em>
+  </p>
+  <p>
+    Players please close your eyes
+  </p>
+  <hr />
+    <div id="new_night_form">
+    <%= form_for([@game, @night]) do |f| %>
+      <% @game.characters.uniq.each do |character| %>
+        <% if character.ability != nil && Player.alive_this_game_character(@game, character) %>
+          <fieldset>
+            <%= label_tag("night_events[#{character.name}]", "Who did #{character.name} #{character.ability}?") %>
+            <%= select_tag("night_events[#{character.name}]", options_from_collection_for_select(@game.alive_players, :id, :name), prompt: "Please Select") %>
+          </fieldset>
+        <% end %>
+      <% end %>
+      <br />
+      <%= f.submit "Night is over", :class => "btn btn-outline-primary" %>
+    <% end %>
+    </div>
+</div>
+
+<div id="editnight_field">
+  <h3>The Night Is Over</h3>
+  <br />
+  <p>
+    “At sunrise everything is luminous but not clear.” 
+    <br />― Norman Maclean, <em>A River Runs Through It and Other Stories</em>
+  </p>
+  <p>
+    Players please open your eyes.
+    <br />
+    Who's the killer? Do we know? Do we want to vote our suspect to death? 
+  </p>
+  <hr />
+  <div id="edit_night_form">
+  <!-- render eidt night form after ajax call--> 
+  </div>
+</div>

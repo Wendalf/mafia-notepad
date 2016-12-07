@@ -67,6 +67,35 @@ body {
   border-color: #F9795B;
 }
 
+.btn-primary {
+  color: #fff;
+  background-color: #f85c37;
+  border-color: #f85c37;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #F9795B;
+  border-color: #F86A49;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: #F9795B;
+  border-color: #F86A49;
+}
+
+
+.btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary:disabled:focus, .btn-primary:disabled.focus {
+  background-color: #F9795B;
+  border-color: #F9795B;
+}
+
+.btn-primary.disabled:hover, .btn-primary:disabled:hover {
+  background-color: #F9795B;
+  border-color: #F9795B;
+}
+
 @media (min-width: 1200px) {
   .container {
       width: 100%;

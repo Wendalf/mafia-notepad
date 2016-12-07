@@ -248,8 +248,23 @@ a:after {
   display: none;  
 }
 
-div#palyersInfo.col-sm-2 {
+#palyersInfo.col-sm-3 {
   text-align: left;
+}
+
+
+#playersInfo ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 10px;
+}
+
+#playersInfo li {
+  list-style:none;
+}
+
+#playersInfo del {
+  color: #f85c37;
 }
 
 #editnight_field {
