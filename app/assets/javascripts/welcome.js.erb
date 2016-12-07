@@ -41,10 +41,10 @@ $(function(){
     }
     var nightRoundups = "";
     var nights = this.nights;
-
+    var gameId = this.id;
     nights.forEach(function(night, index, nights) {
       var nightNumber = index+1;
-      var logs = night.logs;
+      var eachNight = new Night(night, gameId);
       nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + eachNight.renderLastNight() + "</div>";
     });
     $("div#nightRoundup").html(nightRoundups);
@@ -261,7 +261,20 @@ $(function(){
   });
 
   //getting night logs for each night in nightRoundups
-////////////CODE
+////////////CODE******
+  $("#nightRoundup").on("click", "a", function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: this.href,
+      method: "GET",
+      dataType: "json"
+    })
+      .done(function(data) {
+        var logs = data.logs;
+        $("#logs").html("");
+        $("#logs").hide().html(logs).fadeIn("slow");
+    });
+  });
 
 
 
