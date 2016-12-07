@@ -14,6 +14,18 @@ $(function(){
     this.nights = data.nights;
     this.characters = data.characters;
   }
+
+  Game.prototype.winner = function() {
+    var winner = "";
+    if(this.status === "good_people") {
+      winner = "Good People Won" 
+    } else if(this.status === "mafia") {
+      winner = "Mafia Won"
+    } else {
+      winner = "<span style='color:#f85c37;'>PLAYING<span>"
+    }
+    return winner;
+  }
   
   Game.prototype.lastNight = function() {
     var nights = this.nights;
@@ -170,12 +182,13 @@ $(function(){
       dataType: "json"
     })
       .done(function(data) {
+        html += "<ul>"
         data.forEach(function(game, index, data) {
           var game = new Game(game);
-          var gamenumber = index + 1;
-          html += "<p><a href='/games/" + game.id + "'>Game " + gamenumber + "</a>: " + game.capacity + " players | " + game.status + "</p>";
+          var gamenumber = index + 1; 
+          html += "<li><a href='/games/" + game.id + "'>Game " + gamenumber + "</a>: " + game.capacity + " players | " + game.winner() + "</li>";
         });
-        html += "<button type='button' class='btn btn-outline-primary'>Back</button><br><br>"
+        html += "</ul><button type='button' class='btn btn-outline-primary'>Back</button><br><br>"
         $games.html(html);
         $("div.buttons").fadeOut("slow", function() {
           $("div#hiddengames").fadeIn("slow");
