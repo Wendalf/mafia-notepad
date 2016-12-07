@@ -35,6 +35,15 @@ $(function(){
     return lastNight;
   }
 
+  Game.prototype.end = function() {
+    var status = this.status
+    if (status === "stillplaying") {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Game.prototype.buildEditNightForm = function() {
     var players = this.players;
     var gameId = this.id;
@@ -175,11 +184,6 @@ $(function(){
     var src = "<%= asset_path('sea.jpg') %>"
     changeBackgroundImage(src);
     
-    // fade out the new night form, and fade in the edit night form
-    $("div#newnight_field").fadeOut("slow", function() {
-      $("div#editnight_field").fadeIn("slow");
-    });
-
     // reset the html of the areas that will have info being rendered after ajax call.
     $("div#edit_night_form").html("");
     $("div#aboutLastNight").html(""); 
@@ -197,13 +201,24 @@ $(function(){
     })
       .done(function(data) {
         var game = new Game(data);
-        var editFormHtml = game.buildEditNightForm();
         var lastNight = game.lastNight();
         var aboutLastNight = lastNight.renderLastNight();
-
-        $("div#edit_night_form").html(editFormHtml);
         $("div#aboutLastNight").html(aboutLastNight); 
-      });
+        if (game.end()){
+          var result = game.status;
+          $("div#result h3").html(result); 
+          $("div#newnight_field").fadeOut("slow", function() {
+            $("div#result").fadeIn("slow");
+          });
+        } else {
+          var editFormHtml = game.buildEditNightForm();
+          $("div#edit_night_form").html(editFormHtml);
+          // fade out the new night form, and fade in the edit night form
+          $("div#newnight_field").fadeOut("slow", function() {
+            $("div#editnight_field").fadeIn("slow");
+          });
+        }
+    });
   });
 
   // getting last night logs through ajax get request
@@ -229,11 +244,6 @@ $(function(){
     var src = "<%= asset_path('night.jpg') %>"
     changeBackgroundImage(src);
     
-    // fade out the edit night form, and fade in the new night form
-    $("div#editnight_field").fadeOut("slow", function() {
-      $("div#newnight_field").fadeIn("slow");
-    });
-
     // reset the html of the areas that will have info being rendered after ajax call.
     $("div#new_night_form").html("");
     $("div#aboutLastNight").html(""); 
@@ -251,10 +261,22 @@ $(function(){
     })
       .done(function(data) {
         var game = new Game(data);
-        var newFormHtml = game.buildNewNightForm();
+        if (game.end()){
+          var result = game.status;
+          $("div#result h3").html(result); 
+          $("div#editnight_field").fadeOut("slow", function() {
+            $("div#result").fadeIn("slow");
+          });
+        } else {
+          var newFormHtml = game.buildNewNightForm();
+          $("div#new_night_form").html(newFormHtml);
+          // fade out the edit night form, and fade in the new night form
+          $("div#editnight_field").fadeOut("slow", function() {
+            $("div#newnight_field").fadeIn("slow");
+          });
+        }
         var lastNight = game.lastNight();
         var aboutLastNight = lastNight.renderLastNight();
-        $("div#new_night_form").html(newFormHtml);
         $("div#aboutLastNight").html(aboutLastNight);
     });
   });

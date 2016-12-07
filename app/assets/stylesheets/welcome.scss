@@ -227,7 +227,7 @@ a:after {
 }
 
 #mainwrap h3 {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 300;
 }
 
@@ -256,8 +256,16 @@ div#palyersInfo.col-sm-2 {
   display: none;
 }
 
+#playersInfo {
+ margin-top: 40px;
+}
 
+#nightLog {
+ margin-top: 40px;
+}
 
-
+#result {
+  display: none;
+}
 
 

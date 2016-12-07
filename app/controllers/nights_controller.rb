@@ -2,7 +2,6 @@ class NightsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_game, only: [:create, :show, :update]
   before_action :find_night, only: [:show, :update]
-  # before_action :game_end?, only: [:show, :new]
 
   def create
     @night = Night.new(game_id: @game.id, logs: "", notes: "")
@@ -11,6 +10,7 @@ class NightsController < ApplicationController
     DetermineDeath.death_and_notes(got_killed, @night)
 
     @night.save
+    game_end?
 
     respond_to do |format|
       format.html {redirect_to game_path(@game)}
@@ -30,6 +30,7 @@ class NightsController < ApplicationController
     end
     
     @night.save
+    game_end?
 
     respond_to do |format|
       format.html {redirect_to game_path(@game)}
@@ -54,4 +55,11 @@ class NightsController < ApplicationController
     @night = @game.nights.find_by(id: params[:id])
   end
 
+  def game_end?
+    if Player.alive_mafia_number(@game) == 0
+      @game.update(game_status: "good_people")
+    elsif Player.alive_mafia_number(@game) >= Player.alive_good_people_number(@game)
+      @game.update(game_status: "mafia")
+    end
+  end
 end
