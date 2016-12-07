@@ -3,20 +3,7 @@
 // You can use CoffeeScript in this file: http://coffeescript.org/
 $(function(){
 
-  // Menu settings
-  $('#menuToggle, .menu-close').on('click', function(){
-    $('#menuToggle').toggleClass('active');
-    $('body').toggleClass('body-push-toleft');
-    $('#theMenu').toggleClass('menu-open');
-  });
-
-  // hide buttons and show hidden form
-  $("a#new_game").click(function(e) {
-    $("div.buttons").fadeOut("slow", function(){
-      $("div.hiddenform").fadeIn("slow");
-    });    
-    e.preventDefault();
-  });
+//*** JS OBJECTS and PROTOTYPES ***//
 
   //Javascript Model Objects and prototype for Game
   function Game(data) {
@@ -42,6 +29,25 @@ $(function(){
     } else {
       return true;
     }
+  }
+
+  Game.prototype.renderResult = function() {
+    var result = this.status;
+    $("div#gameStatus h2").html("GAME OVER");  
+    if(result === "mafia") {
+      $("div#result h3").html("Mafia Won!");
+    } else {
+      $("div#result h3").html("Good People Won!");
+    }
+    var nightRoundups = "";
+    var nights = this.nights;
+
+    nights.forEach(function(night, index, nights) {
+      var nightNumber = index+1;
+      var logs = night.logs;
+      nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + eachNight.renderLastNight() + "</div>";
+    });
+    $("div#nightRoundup").html(nightRoundups);
   }
 
   Game.prototype.buildEditNightForm = function() {
@@ -119,6 +125,38 @@ $(function(){
     return aliveCharacters;
   }
   
+  //Javascript Model Objects and prototype for Night
+  function Night(night, gameId) {
+    this.id = night.id;
+    this.logs = night.logs;
+    this.notes = night.notes;
+    this.gameId = gameId;
+  }
+
+  Night.prototype.renderLastNight = function() {
+    var aboutLastNight = this.notes + "<br/><div id='logs'><a class='btn btn-outline-primary' href='/games/" + this.gameId + "/nights/" + this.id + "' role='button'>What Happened</a></div>";
+    return aboutLastNight;
+  }
+
+
+
+//*** ANIMATIONS and AJAX CALLS ***//
+
+  // Menu settings
+  $('#menuToggle, .menu-close').on('click', function(){
+    $('#menuToggle').toggleClass('active');
+    $('body').toggleClass('body-push-toleft');
+    $('#theMenu').toggleClass('menu-open');
+  });
+
+  // hide buttons and show hidden form
+  $("a#new_game").click(function(e) {
+    $("div.buttons").fadeOut("slow", function(){
+      $("div.hiddenform").fadeIn("slow");
+    });    
+    e.preventDefault();
+  });
+
   // ajax call for all current user's games and show result
   $("a#all_games").click(function(e) {
     e.preventDefault();
@@ -151,19 +189,6 @@ $(function(){
       $("div.buttons").fadeIn("slow");
     });
   });
-
-  //Javascript Model Objects and prototype for Night
-  function Night(night, gameId) {
-    this.id = night.id;
-    this.logs = night.logs;
-    this.notes = night.notes;
-    this.gameId = gameId;
-  }
-
-  Night.prototype.renderLastNight = function() {
-    var aboutLastNight = this.notes + "<br/><div id='logs'><a class='btn btn-outline-primary' href='/games/" + this.gameId + "/nights/" + this.id + "' role='button'>What Happened</a></div>";
-    return aboutLastNight;
-  }
 
   // change html background-image based on night or day.
 
@@ -205,13 +230,7 @@ $(function(){
         var aboutLastNight = lastNight.renderLastNight();
         $("div#aboutLastNight").html(aboutLastNight); 
         if (game.end()){
-          var result = game.status;
-          $("div#gameStatus h2").html("GAME OVER");  
-            if(result === "mafia") {
-              $("div#result h3").html("Mafia Won!");
-            } else {
-              $("div#result h3").html("Good People Won!");
-            }
+          game.renderResult(); 
           $("div#newnight_field").fadeOut("slow", function() {
             $("div#result").fadeIn("slow");
           });
@@ -241,6 +260,14 @@ $(function(){
     });
   });
 
+  //getting night logs for each night in nightRoundups
+////////////CODE
+
+
+
+
+
+
   //submit the edit night form with ajax post request
   $("#edit_night_form").on("submit", "form", function(e) {
     e.preventDefault();
@@ -267,13 +294,7 @@ $(function(){
       .done(function(data) {
         var game = new Game(data);
         if (game.end()){
-          var result = game.status;
-          $("div#gameStatus h2").html("GMAE OVER");  
-            if(result === "mafia") {
-              $("div#result h3").html("Mafia Won!");
-            } else {
-              $("div#result h3").html("Good People Won!");
-            }
+          game.renderResult(); 
           $("div#editnight_field").fadeOut("slow", function() {
             $("div#result").fadeIn("slow");
           });

@@ -10,9 +10,7 @@ html {
 </style>
 
 <div class="row">
-  <div id="gameStatus">
-    <h2>GAME PLAYING</h2>
-  </div>
+  <%= render "game_status" %>
 </div>
 
 <div class="row">
@@ -21,10 +19,22 @@ html {
   </div>
 
   <div class="col-sm-6" id="night">
-    <%= render "night_forms" %>
+    <% if @game.stillplaying? %>
+      <%= render "night_forms" %>
+      <div id="nightRoundup">
+        <!-- render nights round-up after ajax call if game over --> 
+      </div>
+    <% else %>
+      <%= render "nights_roundup" %>
+      <br />
+    <% end %>
   </div>
 
   <div class="col-sm-3" id="nightLog">
-    <%= render "last_night" %>
+    <% if @game.stillplaying? %>
+      <%= render "last_night" %>
+    <% else %>
+      <%= render "nights_logs" %>
+    <% end %>
   </div>
 </div>
