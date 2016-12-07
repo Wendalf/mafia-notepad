@@ -1,0 +1,12 @@
+<h4>What Happened</h4>
+<% @game.nights.each_with_index do |night, index| %>
+  <br />
+  <div class="row">
+    <h4>NIGHT <%= index+1 %></h4>
+    <% logs_array(night).each do |log| %>
+      <%= log %><br>
+    <% end %>
+  </div>
+<% end %>
+<br />
+

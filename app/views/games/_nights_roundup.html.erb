@@ -1,0 +1,15 @@
+<% if @game.mafia? %>
+  <h3>Mafia Won!</h3>
+<% else %>
+  <h3>Good People Won!</h3>
+<% end %>  
+
+<% @game.nights.each_with_index do |night, index| %>
+  <br />
+  <div class="row">
+    <h4>NIGHT <%= index+1 %></h4>
+    <% notes_array(night).each do |note| %>
+      <%= note %><br>
+    <% end %>
+  </div>
+<% end %>
