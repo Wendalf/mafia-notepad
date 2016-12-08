@@ -1,24 +1,5 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+#Mafia Notepad - A smart game assistant application for the party game Mafia
++ Built internal APIs using Ruby on Rails and the MVC pattern.
++ Used Bootstrap, custom CSS, and jQuery animation to design front end.
++ Created complex database schema and configured ActiveRecord associations.
++ Implemented JavaScript objects with AJAX calls to render game information without a page refresh.
