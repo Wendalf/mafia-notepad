@@ -53,13 +53,11 @@ $(function(){
     }
     var nightRoundups = "";
     var nights = this.nights;
-    var gameId = this.id;
     nights.forEach(function(night, index, nights) {
       var nightNumber = index+1;
-      var eachNight = new Night(night, gameId);
-      nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + eachNight.renderLastNight() + "</div>";
+      nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + night.notes + "<div class='btn btn-outline-primary toggleB'>What Happened</div><p class='toggleP' style='display: none;'>" + night.logs + "</p>" + "</div>";
     });
-    $("div#nightRoundup").html(nightRoundups);
+    $("div#nightRoundup").hide().html(nightRoundups);
   }
 
   Game.prototype.buildEditNightForm = function() {
@@ -245,7 +243,9 @@ $(function(){
         if (game.end()){
           game.renderResult(); 
           $("div#newnight_field").fadeOut("slow", function() {
-            $("div#result").fadeIn("slow");
+            $("div#result").fadeIn("slow", function() {
+              $("div#nightRoundup").fadeIn(300);
+            });
           });
         } else {
           var editFormHtml = game.buildEditNightForm();
@@ -273,26 +273,10 @@ $(function(){
     });
   });
 
-  //getting night logs for each night in nightRoundups
-////////////CODE******
-  $("#nightRoundup").on("click", "a", function(e) {
-    e.preventDefault();
-    $.ajax({
-      url: this.href,
-      method: "GET",
-      dataType: "json"
-    })
-      .done(function(data) {
-        var logs = data.logs;
-        $("#logs").html("");
-        $("#logs").hide().html(logs).fadeIn("slow");
-    });
+  //toggle night logs for each night in nightRoundups
+  $("#nightRoundup").on("click", "div.toggleB", function() {
+    $(this).next().slideToggle(600);
   });
-
-
-
-
-
 
   //submit the edit night form with ajax post request
   $("#edit_night_form").on("submit", "form", function(e) {
@@ -322,7 +306,9 @@ $(function(){
         if (game.end()){
           game.renderResult(); 
           $("div#editnight_field").fadeOut("slow", function() {
-            $("div#result").fadeIn("slow");
+            $("div#result").fadeIn("slow", function() {
+              $("div#nightRoundup").fadeIn(300);
+            });
           });
         } else {
           var newFormHtml = game.buildNewNightForm();
