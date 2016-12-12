@@ -15,7 +15,7 @@
   <hr />
     <div id="new_night_form">
     <%= form_for([@game, @night]) do |f| %>
-      <% @game.characters.uniq.each do |character| %>
+      <% @game.characters.uniq.sort.each do |character| %>
         <% if character.ability != nil && Player.alive_this_game_character(@game, character) %>
           <fieldset>
             <%= label_tag("night_events[#{character.name}]", "Who did #{character.name} #{character.ability}?") %>
