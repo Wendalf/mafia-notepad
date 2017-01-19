@@ -6,206 +6,208 @@ $(function(){
 //*** JS OBJECTS and PROTOTYPES ***//
 
   //Javascript Model Objects and prototype for Game
-  function Game(data) {
-    this.id = data.id;
-    this.capacity = data.capacity;
-    this.status = data.game_status;
-    this.players = data.players;
-    this.nights = data.nights;
-    this.characters = data.characters;
-  }
-
-  Game.prototype.winner = function() {
-    var winner = "";
-    if(this.status === "good_people") {
-      winner = "Good People Won" 
-    } else if(this.status === "mafia") {
-      winner = "Mafia Won"
-    } else {
-      winner = "<span style='color:#f85c37;'>PLAYING<span>"
+  class Game {
+    constructor(data) {
+      this.id = data.id;
+      this.capacity = data.capacity;
+      this.status = data.game_status;
+      this.players = data.players;
+      this.nights = data.nights;
+      this.characters = data.characters;
     }
-    return winner;
-  }
-  
-  Game.prototype.lastNight = function() {
-    var nights = this.nights;
-    var gameId = this.id;
-    var lastNight = new Night(nights[nights.length - 1], gameId);
-    return lastNight;
-  }
-
-  Game.prototype.end = function() {
-    var status = this.status
-    if (status === "stillplaying") {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  Game.prototype.renderResult = function() {
-    var result = this.status;
-    $("div#gameStatus h2").html("GAME OVER");  
-    if(result === "mafia") {
-      $("div#result h3").html("Mafia Won!");
-    } else {
-      $("div#result h3").html("Good People Won!");
-    }
-    var nightRoundups = "";
-    var nights = this.nights;
-    nights.forEach(function(night, index, nights) {
-      var nightNumber = index+1;
-      nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + night.notes + "<div class='btn btn-outline-primary toggleB'>What Happened</div><p class='toggleP' style='display: none;'>" + night.logs + "</p>" + "</div>";
-    });
-    $("div#nightRoundup").hide().html(nightRoundups);
-  }
-
-  Game.prototype.buildEditNightForm = function() {
-    var players = this.players;
-    var gameId = this.id;
-    var nightId = this.lastNight().id;
-    var formHtml = "<form class='edit_night' id='edit_night_" + nightId + "' action='/games/" + gameId + "/nights/" + nightId  + "' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'><input type='hidden' name='_method' value='patch'><label for='day_event_executed'>Did anyone get executed by voting to death?</label>&nbsp;<select name='day_event[executed]' id='day_event_executed'><option value=''>No one got executed</option>";
-
-    players.forEach(function(player) {
-      if(player.alive) {
-        formHtml += "<option value='"+ player.id + "'>" + player.name + "</option>";
+    
+    winner() {
+      let winner = "";
+      if(this.status === "good_people") {
+        winner = "Good People Won" 
+      } else if(this.status === "mafia") {
+        winner = "Mafia Won"
+      } else {
+        winner = "<span style='color:#f85c37;'>PLAYING<span>"
       }
-    });
+      return winner;
+    }
     
-    formHtml += "</select><br/><br/><input type='submit' name='commit' value='Night is coming...' class='btn btn-primary' data-disable-with='Night is coming...'></form>";
-    return formHtml;
-  }
-
-  Game.prototype.buildNewNightForm = function() {
-    var players = this.players;
-    var characters = this.characters;
-    var gameId = this.id;
-    var aliveCharacters = this.aliveCharacters(players, characters);
-    var formHtml = "<form class='new_night' id='new_night' action='/games/" + gameId + "/nights' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'>"
+    lastNight() {
+      let nights = this.nights;
+      let gameId = this.id;
+      let lastNight = new Night(nights[nights.length - 1], gameId);
+      return lastNight;
+    }
     
-    aliveCharacters.forEach(function(c) {
-      formHtml += "<fieldset><label>Who did " + c.name + " " + c.ability + "?</label>&nbsp;<select name='night_events[" + c.name + "]'><option value=''>Please Select</option>";
-      players.forEach(function(player) {
+    end() {
+      let status = this.status
+      if (status === "stillplaying") {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    
+    renderResult() {
+      let result = this.status;
+      $("div#gameStatus h2").html("GAME OVER");  
+      if(result === "mafia") {
+        $("div#result h3").html("Mafia Won!");
+      } else {
+        $("div#result h3").html("Good People Won!");
+      }
+      let nightRoundups = "";
+      let nights = this.nights;
+      nights.forEach((night, index, nights) => {
+        let nightNumber = index+1;
+        nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + night.notes + "<div class='btn btn-outline-primary toggleB'>What Happened</div><p class='toggleP' style='display: none;'>" + night.logs + "</p>" + "</div>";
+      });
+      $("div#nightRoundup").hide().html(nightRoundups);
+    }
+    
+    buildEditNightForm() {
+      let players = this.players;
+      let gameId = this.id;
+      let nightId = this.lastNight().id;
+      let formHtml = "<form class='edit_night' id='edit_night_" + nightId + "' action='/games/" + gameId + "/nights/" + nightId  + "' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'><input type='hidden' name='_method' value='patch'><label for='day_event_executed'>Did anyone get executed by voting to death?</label>&nbsp;<select name='day_event[executed]' id='day_event_executed'><option value=''>No one got executed</option>";
+      
+      players.forEach((player) => {
         if(player.alive) {
           formHtml += "<option value='"+ player.id + "'>" + player.name + "</option>";
         }
       });
-      formHtml += "</select></fieldset>";
-    });
+      
+      formHtml += "</select><br/><br/><input type='submit' name='commit' value='Night is coming...' class='btn btn-primary' data-disable-with='Night is coming...'></form>";
+      return formHtml;
+    }
     
-    formHtml += "<br><input type='submit' name='commit' value='Night is over' class='btn btn-outline-primary' data-disable-with='Night is over'></form>"
-    
-    return formHtml;
-  }
-
-  Game.prototype.aliveCharacters = function(players, characters) {
-
-    var findAliveCharacters = function(players, characters) {
-      var alivePlayers = [];
-      var aliveCharacters = [];
-
-      players.forEach(function(player) { 
-        if(player.alive) {
-          alivePlayers.push(player);  
-        }
-      });
-
-      characters.forEach(function(character) {
-        var characterId = character.id;
-        function cId(alivePlayer) {
-          return alivePlayer.character_id === characterId;
-         }
-        if(alivePlayers.find(cId) && !!character.ability) {
-          aliveCharacters.push(character);
-        }
+    buildNewNightForm() {
+      let players = this.players;
+      let characters = this.characters;
+      let gameId = this.id;
+      let aliveCharacters = this.aliveCharacters(players, characters);
+      let formHtml = "<form class='new_night' id='new_night' action='/games/" + gameId + "/nights' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'>"
+      
+      aliveCharacters.forEach((c) => {
+        formHtml += "<fieldset><label>Who did " + c.name + " " + c.ability + "?</label>&nbsp;<select name='night_events[" + c.name + "]'><option value=''>Please Select</option>";
+        players.forEach((player) => {
+          if(player.alive) {
+            formHtml += "<option value='"+ player.id + "'>" + player.name + "</option>";
+          }
+        });
+        formHtml += "</select></fieldset>";
       });
       
-      return aliveCharacters;
+      formHtml += "<br><input type='submit' name='commit' value='Night is over' class='btn btn-outline-primary' data-disable-with='Night is over'></form>"
+      
+      return formHtml;
     }
-
-    var sortById = function sortByKey(array, key) {
-      return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-      });
+    
+    aliveCharacters(players, characters) {
+      
+      let findAliveCharacters = (players, characters) => {
+        let alivePlayers = [];
+        let aliveCharacters = [];
+        
+        players.forEach((player) => { 
+          if(player.alive) {
+            alivePlayers.push(player);  
+          }
+        });
+        
+        characters.forEach((character) => {
+          let characterId = character.id;
+          const cId = (alivePlayer) => {
+            return alivePlayer.character_id === characterId;
+           }
+          if(alivePlayers.find(cId) && !!character.ability) {
+            aliveCharacters.push(character);
+          }
+        });
+        
+        return aliveCharacters;
+      }
+      
+      let sortById = (array, key) => {
+        return array.sort((a, b) => {
+          let x = a[key]; let y = b[key];
+          return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+      }
+      
+      return sortById(findAliveCharacters(players, characters), "id");
+      
     }
-
-    var aliveCharacters = sortById(findAliveCharacters(players, characters), "id");
-
-    return aliveCharacters;
   }
+
   
   //Javascript Model Objects and prototype for Night
-  function Night(night, gameId) {
-    this.id = night.id;
-    this.logs = night.logs;
-    this.notes = night.notes;
-    this.gameId = gameId;
+  class Night {
+    constructor(night, gameId) {
+      this.id = night.id;
+      this.logs = night.logs;
+      this.notes = night.notes;
+      this.gameId = gameId;
+    }
+    
+    renderLastNight() {
+      let aboutLastNight = this.notes + "<br/><div id='logs'><a class='btn btn-outline-primary' href='/games/" + this.gameId + "/nights/" + this.id + "' role='button'>What Happened</a></div>";
+      return aboutLastNight;
+    }
   }
-
-  Night.prototype.renderLastNight = function() {
-    var aboutLastNight = this.notes + "<br/><div id='logs'><a class='btn btn-outline-primary' href='/games/" + this.gameId + "/nights/" + this.id + "' role='button'>What Happened</a></div>";
-    return aboutLastNight;
-  }
-
-
 
 //*** ANIMATIONS and AJAX CALLS ***//
 
   // Menu settings
-  $('#menuToggle, .menu-close').on('click', function(){
+  $('#menuToggle, .menu-close').on('click', () => {
     $('#menuToggle').toggleClass('active');
     $('body').toggleClass('body-push-toleft');
     $('#theMenu').toggleClass('menu-open');
   });
 
   // hide buttons and show hidden form
-  $("a#new_game").click(function(e) {
-    $("div.buttons").fadeOut("slow", function(){
+  $("a#new_game").click((e) => {
+    $("div.buttons").fadeOut("slow", () => {
       $("div.hiddenform").fadeIn("slow");
     });    
     e.preventDefault();
   });
 
   // ajax call for all current user's games and show result
-  $("a#all_games").click(function(e) {
+  $("a#all_games").click((e) => {
     e.preventDefault();
-
-    var $games = $("div#hiddengames");
-    var html = "<h3>Your Games</h3>";
+    
+    let $games = $("div#hiddengames");
+    let html = "<h3>Your Games</h3>";
 
     $.ajax({
       method: "GET",
       url: "/games",
       dataType: "json"
     })
-      .done(function(data) {
+      .done((data) => {
         html += "<ul>"
-        data.forEach(function(game, index, data) {
-          var game = new Game(game);
-          var gamenumber = index + 1; 
+        data.forEach((gameAttributes, index, data) => {
+          let game = new Game(gameAttributes);
+          let gamenumber = index + 1; 
           html += "<li><a href='/games/" + game.id + "'>Game " + gamenumber + "</a>: " + game.capacity + " players | " + game.winner() + "</li>";
         });
         html += "</ul><button type='button' class='btn btn-outline-primary'>Back</button><br><br>"
         $games.html(html);
-        $("div.buttons").fadeOut("slow", function() {
+        $("div.buttons").fadeOut("slow", () => {
           $("div#hiddengames").fadeIn("slow");
         });
       });
   });
   
   //going back from games field to toggled away buttons
-  $("div#hiddengames").on("click", "button", function() {
-    $("div#hiddengames").fadeOut("slow", function() {
+  $("div#hiddengames").on("click", "button", () => {
+    $("div#hiddengames").fadeOut("slow", () => {
       $("div.buttons").fadeIn("slow");
     });
   });
 
   // change html background-image based on night or day.
 
-  var changeBackgroundImage = function(src) {
-    var $img = $( '<img src="' + src + '">' );
-    $img.bind( 'load', function(){
+  let changeBackgroundImage = (src) => {
+    let $img = $( '<img src="' + src + '">' );
+    $img.bind( 'load', () => {
       $("html").css({"background-image": "url(" + src + ")"});
     } );
     if( $img[0].width ){ $img.trigger( 'load' ); }
@@ -213,11 +215,10 @@ $(function(){
   
   // submit the new night form with ajax post request
 
-  $("#new_night_form").on("submit", "form", function(e) {
+  $("#new_night_form").on("submit", "form", (e) => {
     e.preventDefault();
-
     // preload image to prevent browser flicker and change background image
-    var src = "<%= asset_path('sea.jpg') %>"
+    let src = "<%= asset_path('sea.jpg') %>"
     changeBackgroundImage(src);
     
     // reset the html of the areas that will have info being rendered after ajax call.
@@ -225,9 +226,9 @@ $(function(){
     $("div#aboutLastNight").html(""); 
 
     //ajax call
-    var $form = $(this);
-    var action = $form.attr("action");
-    var params = $form.serialize();
+    let $form = $(e.currentTarget);
+    let action = $form.attr("action");
+    let params = $form.serialize();
 
     $.ajax({
       url: action,
@@ -235,23 +236,23 @@ $(function(){
       dataType: "json",
       method: "POST"
     })
-      .done(function(data) {
-        var game = new Game(data);
-        var lastNight = game.lastNight();
-        var aboutLastNight = lastNight.renderLastNight();
+      .done((data) => {
+        let game = new Game(data);
+        let lastNight = game.lastNight();
+        let aboutLastNight = lastNight.renderLastNight();
         $("div#aboutLastNight").html(aboutLastNight); 
         if (game.end()){
           game.renderResult(); 
-          $("div#newnight_field").fadeOut("slow", function() {
-            $("div#result").fadeIn("slow", function() {
+          $("div#newnight_field").fadeOut("slow", () => {
+            $("div#result").fadeIn("slow", () => {
               $("div#nightRoundup").fadeIn(300);
             });
           });
         } else {
-          var editFormHtml = game.buildEditNightForm();
+          let editFormHtml = game.buildEditNightForm();
           $("div#edit_night_form").html(editFormHtml);
           // fade out the new night form, and fade in the edit night form
-          $("div#newnight_field").fadeOut("slow", function() {
+          $("div#newnight_field").fadeOut("slow", () => {
             $("div#editnight_field").fadeIn("slow");
           });
         }
@@ -259,31 +260,32 @@ $(function(){
   });
 
   // getting last night logs through ajax get request
-  $("#aboutLastNight").on("click", "a", function(e) {
+  $("#aboutLastNight").on("click", "a", (e) => {
     e.preventDefault();
+    var $a = $(e.currentTarget)[0];
     $.ajax({
-      url: this.href,
+      url: $a.href,
       method: "GET",
       dataType: "json"
     })
-      .done(function(data) {
-        var logs = data.logs;
+      .done((data) => {
+        let logs = data.logs;
         $("#logs").html("");
         $("#logs").hide().html(logs).fadeIn("slow");
     });
   });
 
   //toggle night logs for each night in nightRoundups
-  $("#nightRoundup").on("click", "div.toggleB", function() {
-    $(this).next().slideToggle(600);
+  $("#nightRoundup").on("click", "div.toggleB", (e) => {
+    $(e.currentTarget).next().slideToggle(600);
   });
 
   //submit the edit night form with ajax post request
-  $("#edit_night_form").on("submit", "form", function(e) {
+  $("#edit_night_form").on("submit", "form", (e) => {
     e.preventDefault();
 
     // preload image to prevent browser flicker and change background image
-    var src = "<%= asset_path('night.jpg') %>"
+    let src = "<%= asset_path('night.jpg') %>"
     changeBackgroundImage(src);
     
     // reset the html of the areas that will have info being rendered after ajax call.
@@ -291,9 +293,9 @@ $(function(){
     $("div#aboutLastNight").html(""); 
     
     // ajax call
-    var $form = $(this);
-    var action = $form.attr("action");
-    var params = $form.serialize();
+    let $form = $(e.currentTarget);
+    let action = $form.attr("action");
+    let params = $form.serialize();
 
     $.ajax({
       url: action,
@@ -301,28 +303,27 @@ $(function(){
       dataType: "json",
       method: "POST" 
     })
-      .done(function(data) {
-        var game = new Game(data);
+      .done((data) => {
+        let game = new Game(data);
         if (game.end()){
           game.renderResult(); 
-          $("div#editnight_field").fadeOut("slow", function() {
-            $("div#result").fadeIn("slow", function() {
+          $("div#editnight_field").fadeOut("slow", () => {
+            $("div#result").fadeIn("slow", () => {
               $("div#nightRoundup").fadeIn(300);
             });
           });
         } else {
-          var newFormHtml = game.buildNewNightForm();
+          let newFormHtml = game.buildNewNightForm();
           $("div#new_night_form").html(newFormHtml);
           // fade out the edit night form, and fade in the new night form
-          $("div#editnight_field").fadeOut("slow", function() {
+          $("div#editnight_field").fadeOut("slow", () => {
             $("div#newnight_field").fadeIn("slow");
           });
         }
-        var lastNight = game.lastNight();
-        var aboutLastNight = lastNight.renderLastNight();
+        let lastNight = game.lastNight();
+        let aboutLastNight = lastNight.renderLastNight();
         $("div#aboutLastNight").html(aboutLastNight);
     });
   });
-
 
 });
