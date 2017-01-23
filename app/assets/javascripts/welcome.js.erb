@@ -14,6 +14,7 @@ $(function(){
       this.players = data.players;
       this.nights = data.nights;
       this.characters = data.characters;
+      this.lastNightId = data.nights[data.nights.length - 1].id;
     }
     
     lastNight() {
@@ -40,32 +41,21 @@ $(function(){
       } else {
         $("div#result h3").html("Good People Won!");
       }
-      let nightRoundups = "";
-      let nights = this.nights;
-      nights.forEach((night, index, nights) => {
-        let nightNumber = index+1;
-        nightRoundups += "<br/><div class='row'><h4>NIGHT " + nightNumber + "</h4>" + night.notes + "<div class='btn btn-outline-primary toggleB'>What Happened</div><p class='toggleP' style='display: none;'>" + night.logs + "</p>" + "</div>";
-      });
-      $("div#nightRoundup").hide().html(nightRoundups);
+      let gameId = this.id;
+      let nights = this.nights.map((night) => {return new Night(night, gameId)});
+      let resulttemplate = HandlebarsTemplates['gameresult'];
+      $("div#nightRoundup").hide().html(resulttemplate(nights));
     }
     
     buildEditNightForm() {
-      let players = this.players;
-      let gameId = this.id;
-      let nightId = this.lastNight().id;
-      let formHtml = "<form class='edit_night' id='edit_night_" + nightId + "' action='/games/" + gameId + "/nights/" + nightId  + "' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'><input type='hidden' name='_method' value='patch'><label for='day_event_executed'>Did anyone get executed by voting to death?</label>&nbsp;<select name='day_event[executed]' id='day_event_executed'><option value=''>No one got executed</option>";
-      
-      players.forEach((player) => {
-        if(player.alive) {
-          formHtml += "<option value='"+ player.id + "'>" + player.name + "</option>";
-        }
-      });
-      
-      formHtml += "</select><br/><br/><input type='submit' name='commit' value='Night is coming...' class='btn btn-primary' data-disable-with='Night is coming...'></form>";
-      return formHtml;
+      let editnightformtemplate = HandlebarsTemplates['editnight'];
+      return editnightformtemplate(this);
     }
     
     buildNewNightForm() {
+      let {players, characters, id} = this; 
+      let gamenight = {players: players, characters: characters, gameId: id, aliveCharacters: this.aliveCharacters(players, characters)};
+      debugger;
       let players = this.players;
       let characters = this.characters;
       let gameId = this.id;
@@ -129,7 +119,7 @@ $(function(){
   class Night {
     constructor(night, gameId) {
       this.id = night.id;
-      this.logs = night.logs;
+      this.logs = night.logs.split(".");
       this.notes = night.notes.split(".");
       this.gameId = gameId;
     }

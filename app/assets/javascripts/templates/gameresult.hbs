@@ -1,0 +1,17 @@
+{{#each this}}
+<br/>
+<div class='row'>
+  <h4>NIGHT {{counter @index}}</h4>
+    {{#each notes}}
+      {{this}}
+      <br />
+    {{/each}}
+  <div class='btn btn-outline-primary toggleB'>What Happened</div>
+  <p class='toggleP' style='display: none;'>
+    {{#each logs}}
+      {{this}}
+      <br />
+    {{/each}}
+  </p>
+</div>
+{{/each}}

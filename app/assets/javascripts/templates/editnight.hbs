@@ -1,0 +1,14 @@
+<form class='edit_night' id='edit_night_{{lastNightId}}' action='/games/{{id}}/nights/{{lastNightId}}' accept-charset='UTF-8' method='post'>
+<input name='utf8' type='hidden' value='✓'>
+<input type='hidden' name='_method' value='patch'>
+<label for='day_event_executed'>Did anyone get executed by voting to death?</label>
+&nbsp;
+<select name='day_event[executed]' id='day_event_executed'>
+<option value=''>No one got executed</option>
+{{#each players}}
+<option value='{{id}}'>{{name}}</option>
+{{/each}}
+</select>
+<br/><br/>
+<input type='submit' name='commit' value='Night is coming...' class='btn btn-primary' data-disable-with='Night is coming...'>
+</form>

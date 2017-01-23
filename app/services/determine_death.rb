@@ -42,7 +42,7 @@ class DetermineDeath
     end
 
     if got_killed.empty?
-      night.notes << "No one got killed last night."
+      night.notes << " No one got killed last night."
     else
       got_killed.each do |player|
         night.notes << "#{player.name} got killed last night." 
