@@ -48,33 +48,15 @@ $(function(){
     }
     
     buildEditNightForm() {
-      let editnightformtemplate = HandlebarsTemplates['editnight'];
-      return editnightformtemplate(this);
+      let editNightFormTemplate = HandlebarsTemplates['editnight'];
+      return editNightFormTemplate(this);
     }
     
     buildNewNightForm() {
       let {players, characters, id} = this; 
-      let gamenight = {players: players, characters: characters, gameId: id, aliveCharacters: this.aliveCharacters(players, characters)};
-      debugger;
-      let players = this.players;
-      let characters = this.characters;
-      let gameId = this.id;
-      let aliveCharacters = this.aliveCharacters(players, characters);
-      let formHtml = "<form class='new_night' id='new_night' action='/games/" + gameId + "/nights' accept-charset='UTF-8' method='post'><input name='utf8' type='hidden' value='✓'>"
-      
-      aliveCharacters.forEach((c) => {
-        formHtml += "<fieldset><label>Who did " + c.name + " " + c.ability + "?</label>&nbsp;<select name='night_events[" + c.name + "]'><option value=''>Please Select</option>";
-        players.forEach((player) => {
-          if(player.alive) {
-            formHtml += "<option value='"+ player.id + "'>" + player.name + "</option>";
-          }
-        });
-        formHtml += "</select></fieldset>";
-      });
-      
-      formHtml += "<br><input type='submit' name='commit' value='Night is over' class='btn btn-outline-primary' data-disable-with='Night is over'></form>"
-      
-      return formHtml;
+      let gamenight = {gameId: id, aliveCharacters: this.aliveCharacters(players, characters)};
+      let newNightFormTemplate = HandlebarsTemplates['newnight'];
+      return newNightFormTemplate(gamenight); 
     }
     
     aliveCharacters(players, characters) {
@@ -109,12 +91,13 @@ $(function(){
         });
       }
       
-      return sortById(findAliveCharacters(players, characters), "id");
+      return sortById(findAliveCharacters(players, characters), "id").map((c)=>{
+        return {name: c.name, ability:c.ability, players: players}
+      })
       
     }
   }
 
-  
   //Javascript Model Objects and prototype for Night
   class Night {
     constructor(night, gameId) {
@@ -132,7 +115,6 @@ $(function(){
 
 
 //*** Handlebars Custom Helpers ***//
-
   Handlebars.registerHelper('winner', function() {
     if(this.game_status === "good_people") {
       return new Handlebars.SafeString("Good People Won")
@@ -146,7 +128,6 @@ $(function(){
   Handlebars.registerHelper("counter", (index) => {
     return index + 1;
   });
-
 
 
 //*** ANIMATIONS and AJAX CALLS ***//
@@ -193,7 +174,6 @@ $(function(){
   });
 
   // change html background-image based on night or day.
-
   let changeBackgroundImage = (src) => {
     let $img = $( '<img src="' + src + '">' );
     $img.bind( 'load', () => {
@@ -203,7 +183,6 @@ $(function(){
   }
   
   // submit the new night form with ajax post request
-
   $("#new_night_form").on("submit", "form", (e) => {
     e.preventDefault();
     // preload image to prevent browser flicker and change background image
@@ -218,7 +197,6 @@ $(function(){
     let $form = $(e.currentTarget);
     let action = $form.attr("action");
     let params = $form.serialize();
-
     $.ajax({
       url: action,
       data: params,
@@ -286,7 +264,6 @@ $(function(){
     let $form = $(e.currentTarget);
     let action = $form.attr("action");
     let params = $form.serialize();
-
     $.ajax({
       url: action,
       data: params,
@@ -315,5 +292,4 @@ $(function(){
         $("div#aboutLastNight").html(aboutLastNight);
     });
   });
-
 });

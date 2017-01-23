@@ -6,7 +6,9 @@
 <select name='day_event[executed]' id='day_event_executed'>
 <option value=''>No one got executed</option>
 {{#each players}}
+{{#if alive}}
 <option value='{{id}}'>{{name}}</option>
+{{/if}}
 {{/each}}
 </select>
 <br/><br/>

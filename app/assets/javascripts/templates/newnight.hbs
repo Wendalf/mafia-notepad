@@ -1,0 +1,18 @@
+<form class='new_night' id='new_night' action='/games/{{gameId}}/nights' accept-charset='UTF-8' method='post'>
+  <input name='utf8' type='hidden' value='✓'>
+  {{#each aliveCharacters}}
+    <fieldset>
+    <label>Who did {{name}} {{ability}}?</label>&nbsp;
+    <select name='night_events[{{name}}]'>
+      <option value=''>Please Select</option>
+      {{#each players}}
+      {{#if alive}}
+      <option value='{{id}}'>{{name}}</option>
+      {{/if}}
+      {{/each}}
+    </select>
+    </fieldset>
+  {{/each}}
+  <br>
+  <input type='submit' name='commit' value='Night is over' class='btn btn-outline-primary' data-disable-with='Night is over'>
+</form>
