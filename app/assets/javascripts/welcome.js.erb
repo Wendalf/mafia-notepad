@@ -16,18 +16,6 @@ $(function(){
       this.characters = data.characters;
     }
     
-    winner() {
-      let winner = "";
-      if(this.status === "good_people") {
-        winner = "Good People Won" 
-      } else if(this.status === "mafia") {
-        winner = "Mafia Won"
-      } else {
-        winner = "<span style='color:#f85c37;'>PLAYING<span>"
-      }
-      return winner;
-    }
-    
     lastNight() {
       let nights = this.nights;
       let gameId = this.id;
@@ -147,10 +135,29 @@ $(function(){
     }
     
     renderLastNight() {
-      let aboutLastNight = this.notes + "<br/><div id='logs'><a class='btn btn-outline-primary' href='/games/" + this.gameId + "/nights/" + this.id + "' role='button'>What Happened</a></div>";
+      let aboutLastNight = HandlebarsTemplates['lastnightnotes'](this);
       return aboutLastNight;
     }
   }
+
+
+//*** Handlebars Custom Helpers ***//
+
+  Handlebars.registerHelper('winner', function() {
+    if(this.game_status === "good_people") {
+      return new Handlebars.SafeString("Good People Won")
+    } else if(this.game_status === "mafia") {
+      return new Handlebars.SafeString("Mafia Won")
+    } else {
+      return new Handlebars.SafeString("<span style='color:#f85c37;'>PLAYING<span>")
+    }
+  })
+
+  Handlebars.registerHelper("counter", (index) => {
+    return index + 1;
+  });
+
+
 
 //*** ANIMATIONS and AJAX CALLS ***//
 
@@ -172,9 +179,7 @@ $(function(){
   // ajax call for all current user's games and show result
   $("a#all_games").click((e) => {
     e.preventDefault();
-    
     let $games = $("div#hiddengames");
-    let html = "<h3>Your Games</h3>";
 
     $.ajax({
       method: "GET",
@@ -182,14 +187,8 @@ $(function(){
       dataType: "json"
     })
       .done((data) => {
-        html += "<ul>"
-        data.forEach((gameAttributes, index, data) => {
-          let game = new Game(gameAttributes);
-          let gamenumber = index + 1; 
-          html += "<li><a href='/games/" + game.id + "'>Game " + gamenumber + "</a>: " + game.capacity + " players | " + game.winner() + "</li>";
-        });
-        html += "</ul><button type='button' class='btn btn-outline-primary'>Back</button><br><br>"
-        $games.html(html);
+        let template = HandlebarsTemplates['allgames'];
+        $games.html(template(data));
         $("div.buttons").fadeOut("slow", () => {
           $("div#hiddengames").fadeIn("slow");
         });

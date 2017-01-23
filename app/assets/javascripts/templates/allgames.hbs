@@ -1,0 +1,9 @@
+<h3>Your Games</h3>
+<ul>
+  {{#each this}}
+  <li><a href="/games/{{id}}">Game {{counter @index}}</a>: {{capacity}} players | {{winner}}</li>
+  {{/each}}
+</ul>
+
+<button type='button' class='btn btn-outline-primary'>Back</button><br><br>
+

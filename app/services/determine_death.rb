@@ -21,7 +21,7 @@ class DetermineDeath
       character = Character.find_by(name: character_name)
       player = Player.find(player_id) if player_id != ""
       if !!player
-        night.logs << "#{character_name.capitalize} #{character.ability}ed #{player.name}.<br>"
+        night.logs << "#{character_name.capitalize} #{character.ability}ed #{player.name}."
         if character.kill? && !got_blocked.include?(character)
           player.assign_attributes(alive: false)
           got_killed << player
@@ -29,7 +29,7 @@ class DetermineDeath
           got_killed.delete(player)
         end
       else 
-        night.logs << "#{character_name.capitalize} #{character.ability}ed nobody.<br>"
+        night.logs << "#{character_name.capitalize} #{character.ability}ed nobody."
       end
     end
 
@@ -42,10 +42,10 @@ class DetermineDeath
     end
 
     if got_killed.empty?
-      night.notes << "No one got killed last night.<br>"
+      night.notes << "No one got killed last night."
     else
       got_killed.each do |player|
-        night.notes << "#{player.name} got killed last night.<br>" 
+        night.notes << "#{player.name} got killed last night." 
       end   
     end
 
