@@ -130,7 +130,7 @@ $(function(){
     constructor(night, gameId) {
       this.id = night.id;
       this.logs = night.logs;
-      this.notes = night.notes;
+      this.notes = night.notes.split(".");
       this.gameId = gameId;
     }
     
@@ -268,9 +268,10 @@ $(function(){
       dataType: "json"
     })
       .done((data) => {
-        let logs = data.logs;
+        let logs = data.logs.split(".");
+        let logtemplate = HandlebarsTemplates['nightlogs'];
         $("#logs").html("");
-        $("#logs").hide().html(logs).fadeIn("slow");
+        $("#logs").hide().html(logtemplate(logs)).fadeIn("slow");
     });
   });
 

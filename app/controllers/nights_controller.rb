@@ -22,11 +22,11 @@ class NightsController < ApplicationController
     player_id = params[:day_event][:executed]
 
     if player_id == ""
-      @night.notes << "No body got executed by votes.<br>"
+      @night.notes << "No body got executed by votes."
     else
       player = Player.find(player_id)
       player.update(alive: false)
-      @night.notes << "#{player.name} has been executed by votes.<br>"
+      @night.notes << "#{player.name} has been executed by votes."
     end
     
     @night.save
