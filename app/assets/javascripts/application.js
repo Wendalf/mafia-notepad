@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require welcome
+//= require main
 //= require handlebars.runtime
 //= require_tree ./templates
 //= require_tree .
