@@ -60,17 +60,15 @@ $(function(){
     }
     
     aliveCharacters(players, characters) {
+      let alivePlayers = [];
+      players.forEach((player) => { 
+        if(player.alive) {
+          alivePlayers.push(player);  
+        }
+      });
       
-      let findAliveCharacters = (players, characters) => {
-        let alivePlayers = [];
+      let findAliveCharacters = (alivePlayers, characters) => {
         let aliveCharacters = [];
-        
-        players.forEach((player) => { 
-          if(player.alive) {
-            alivePlayers.push(player);  
-          }
-        });
-        
         characters.forEach((character) => {
           let characterId = character.id;
           const cId = (alivePlayer) => {
@@ -80,7 +78,6 @@ $(function(){
             aliveCharacters.push(character);
           }
         });
-        
         return aliveCharacters;
       }
       
@@ -90,11 +87,14 @@ $(function(){
           return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
       }
-      
-      return sortById(findAliveCharacters(players, characters), "id").map((c)=>{
-        return {name: c.name, ability:c.ability, players: players}
-      })
-      
+
+      return sortById(findAliveCharacters(alivePlayers, characters), "id").map((c)=>{
+        if(c.name === "doctor") {
+          return {name: c.name, ability: c.ability, players: alivePlayers}
+        } else {
+          return {name: c.name, ability: c.ability, players: alivePlayers.filter((p) => p.character_id !== c.id)}
+        } 
+      });
     }
   }
 

@@ -6,9 +6,7 @@
     <select name='night_events[{{name}}]'>
       <option value=''>Please Select</option>
       {{#each players}}
-      {{#if alive}}
       <option value='{{id}}'>{{name}}</option>
-      {{/if}}
       {{/each}}
     </select>
     </fieldset>
