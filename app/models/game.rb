@@ -8,8 +8,12 @@ class Game < ApplicationRecord
 
   enum game_status: [:stillplaying, :mafia, :good_people]
 
-  def alive_players
-    Player.where("game_id = ?", self.id).where("alive = ?", true)
+  def alive_players(character)
+    if character.name == "doctor"
+      Player.where("game_id = ?", self.id).where("alive = ?", true)
+    else
+      Player.where("game_id = ?", self.id).where("alive = ?", true).where.not("character_id = ?", character.id)
+    end
   end
 
 end

@@ -19,7 +19,7 @@
         <% if character.ability != nil && Player.alive_this_game_character(@game, character) %>
           <fieldset>
             <%= label_tag("night_events[#{character.name}]", "Who did #{character.name} #{character.ability}?") %>
-            <%= select_tag("night_events[#{character.name}]", options_from_collection_for_select(@game.alive_players, :id, :name), prompt: "Please Select") %>
+            <%= select_tag("night_events[#{character.name}]", options_from_collection_for_select(@game.alive_players(character), :id, :name), prompt: "Please Select") %>
           </fieldset>
         <% end %>
       <% end %>
